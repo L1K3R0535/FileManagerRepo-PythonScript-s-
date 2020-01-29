@@ -1,0 +1,19 @@
+ 
+#!/usr/bin/python3
+import base64
+def sh(arg):
+    i=input(arg); return i
+def encode(arg):
+    i=base64.b64encode(arg.encode(encoding="utf-8",errors="strict")); print("Encoded message: \n",i)
+def decode(arg):
+    i=base64.b64decode(eval(arg).decode(encoding="utf-8",errors="strict")); print("Decoded message: \n",i)
+def to_encode_or_to_decode():
+    i=sh("(Psst, press shift to Ctrl_C+V)\n'encode' or 'decode': ")
+    if i == "encode":
+        return encode(sh("$: "))
+    elif i == "decode":
+        return decode(sh("$: "))
+def main():
+    to_encode_or_to_decode()
+if __name__ == "__main__":
+    main()
