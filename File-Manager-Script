@@ -1,24 +1,17 @@
 #!/usr/bin/python3
 #automation script console thing
-import os, re
+import os, re, sys
 try:
     from to_encode_or_to_decode import *
     print("Ah nice; imported 'to encode or to decode.py'!")
 except ImportError:
     print("Sorry, error importing 'to_encode_or_to_decode.py'.")
-except IOError:
-    print("Ok wtf, really sorry; that is truly unexpected!")
-try:
-    from google_graber_ import *
-    print("Ah nice, imported 'google_graber'.")
-except ImportError:
-    print("Sorry, was unable to import 'google_graber'.")
 cmdlist = ["cmdlist:\nList's all available commands with a brief description.",
     "exit:\nExits the program.",
     "clear:\nClears the current screen.",
     "ldir:\nLists all the files in the current directory.",
     "ldirperm:\nLists all the files in the current directory; in the longer format, displaying read and write permisions.",
-    "mkfile:\nPrompts the user for input (@ the '$'). Then makes a file with that name.",
+    "mkfile:\nPrompts the user for input (@ the '$'). Then makes a file with that name(Linux only for the moment)",
     "rmfile:\nPrompts a user for input then removes a file that matches that input.",
     "pwd:\nPrints the current working directory.",
     "mkdir:\nPrompts the user for a name and makes a directory.",
@@ -26,7 +19,7 @@ cmdlist = ["cmdlist:\nList's all available commands with a brief description.",
     "chdir:\nPrompts the user to provide a path. e.g. '/home/admin/otherdirectory', then changes the current directory to that path.",
     "b64console:\nProvides the user with a console to base64 encode data.",
     "printf:\nPrints out the text to the screen e.g 'printf sometext'.",
-    "read:\nPrints out the content of a file.",
+    "read:\nPrints out the content of a file in the terminal window(or command line under windows).",
     "write:\nWrites input to a file.",
     "usr:\nPrints the name of the current user.",
     "printl:\nPrints a given argument is a letter by letter format."
@@ -36,14 +29,16 @@ cmdlist = ["cmdlist:\nList's all available commands with a brief description.",
     "digfile:\nPrompts you for a filename and string of text to search. If it finds a match will print out a result. Note: you must be in the right directory.",
     "digdir:\nPrompts you for a path to a directory and for content to search for recursively and match. For example: '/home/user/dir' < [path example]",
     "findStr:\nAsks for a filename and then searches it for a specific string based on another input.(The file you are searching must be in the same directory)",
-    "gg:\nOpens the menu for 'google_graber' (used for web crawling/google hacking)."
 ]
+OSIS=sys.platform
+print("Ah nice we can see your operating system is %s.\nWill make a note of that!"%(OSIS))
+OSIS=True
 def BasicSH():
-    return input("$ ")
+    return input("$ ") #very useful
 def pleasefilename():
-    print("Please enter a filename at the prompt. ('$')\n")
+    print("Please enter a filename at the prompt. ('$')\n") #Ah that too
 def pleasedirectoryname():
-    print("Please enter a directory name at the promt. ('$')\n")
+    print("Please enter a directory name at the prompt. ('$')\n")
 def pleasepath():
     print("Please enter a valid path. ( '/home/username/myfiles')\n")
 def start():
@@ -104,22 +99,32 @@ def issue_cmd(cmd):
         command_list.digdir()
     elif cmd == "findStr":
         command_list.findStr()
-    elif cmd == "gg":
-        google_graber.menu(1)
 #space
 class command_list:
     def clear():
-        return os.system("clear")
+        if OSIS:
+            return os.system("cls")
+        else:
+            return os.system("clear")
     def ldir():
-        return os.system("ls -a")
+        if OSIS:
+            return os.system("dir")
+        else:
+            return os.system("ls -a")
     def ldirperm():
-        return os.system("ls -la")
+        if OSIS:
+            print("Sorry, not on window's you don't!")
+        else:
+            return os.system("ls -la")
     def mkfile(filename):
-        try:
-            os.system("touch %s"%(filename))
-        except IOError:
-            print("""Sorry error making the file\n
-            Already a file with this name in this directory?""")
+        if OSIS:
+            print("Not available under windows!")
+        else:
+            try:
+                os.system("touch %s"%(filename))
+            except IOError:
+                print("""Sorry error making the file\n
+                Already a file with this name in this directory?""")
     def rmfile(filename):
         return os.remove(filename)
     def pwd():
@@ -136,7 +141,17 @@ class command_list:
     def read():
         print("Filename to print to screen:\n"); arg=BasicSH()
         try:
-            os.system("cat %s"%(arg))
+            if OSIS:
+                try:
+                    tmpVar=open("%s"%(arg),"r")
+                    for each in tmpVar.readlines():
+                            print(each)
+                except FileNotFoundError:
+                    print("File not found!(please check the file name)")
+                finally:
+                    tmpVar.close()
+            else:
+                os.system("cat %s"%(arg))
         except IOError:
             print("Sorry file not found...")
         finally:
@@ -144,9 +159,16 @@ class command_list:
     def write():
         print("filename please:\n"); filename=BasicSH()
         print("Content to write to file:\n"); content=BasicSH()
+        print("Existing file or new file?('e'|'n').\n"); noe=BasicSH()
         try:
-            open_file=open("%s"%(filename),"a+"); open_file.write(content)
-            print("Written to file!")
+            if noe == "e":
+                open_file=open("%s"%(filename),"a+"); open_file.write(content)
+                open_file.close()
+                print("Written to file!")
+            elif noe == "n":
+                open_file=open("%s"%(filename),"w+"); open_file.write(content)
+                open_file.close()
+                print("Written to file!")
         except FileNotFoundError:
             print("Sorry, file not found!\nWrong directory?\nWrong file name?\n")
         except IOError:
