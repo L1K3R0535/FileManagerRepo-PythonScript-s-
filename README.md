@@ -1,5 +1,5 @@
 # FileManagerRepo-PythonScript-s-
-This repo contains a file management tool(only for Debian based Linux at first, that will change) Basically I just wanted it to be seperate from the private stuff I am working on for 'AutomationMadness' though it could kind of go in there. Yes that will be public one day(sometime in the next month or two)
+This repo contains a file management and infomation gathering tool(s)(only for Debian based Linux at first, that will change) Basically I just wanted it to be seperate from the private stuff I am working on for 'AutomationMadness' though it could kind of go in there. Yes that will be public one day(sometime in the future)
 
 Plus the external Base64 conversion script that is used in the program (plus any others that I end up makeing).
 
