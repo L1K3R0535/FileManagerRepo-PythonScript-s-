@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #automation script console thing
-import os, re, sys
+import os, sys
 try:
     from to_encode_or_to_decode import *
     print("Ah nice; imported 'to encode or to decode.py'!")
@@ -32,7 +32,6 @@ cmdlist = ["cmdlist:\nList's all available commands with a brief description.",
 ]
 OSIS=sys.platform
 print("Ah nice we can see your operating system is %s.\nWill make a note of that!"%(OSIS))
-OSIS=True
 def BasicSH():
     return input("$ ") #very useful
 def pleasefilename():
@@ -112,7 +111,7 @@ class command_list:
         else:
             return os.system("ls -a")
     def ldirperm():
-        if OSIS:
+        if OSIS == "win32" or OSIS == "cygwin":
             print("Sorry, not on window's you don't!")
         else:
             return os.system("ls -la")
